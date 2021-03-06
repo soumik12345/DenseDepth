@@ -6,15 +6,20 @@ from densedepth import (
     NYUDepthV2DataLoader,
     DenseDepth, DenseDepthLoss
 )
-from densedepth.utils import init_wandb
+from densedepth.utils import init_wandb, download_dataset
 
 
 experiment_name = 'NYU_Depth_V2_single_image_overfit'
 
-# init_wandb(
-#     project_name='densedepth', entity='19soumik-rakshit96',
-#     experiment_name=experiment_name, wandb_api_key='cf0947ccde62903d4df0742a58b8a54ca4c11673'
-# )
+download_dataset(
+    dataset_name='nyu_data',
+    dataset_access_key='1nQd4hcsQVnX33vTv4dF2-xF_pjQ94S8P'
+)
+
+init_wandb(
+    project_name='densedepth', entity='19soumik-rakshit96',
+    experiment_name=experiment_name, wandb_api_key='cf0947ccde62903d4df0742a58b8a54ca4c11673'
+)
 
 loader = NYUDepthV2DataLoader(
     data_dir='C:\\Workspace\\nyu_data',
@@ -39,7 +44,7 @@ callbacks = [
         log_dir='./logs/train/' + datetime.now().strftime('%Y%m%d-%H%M%S'),
         histogram_freq=1, update_freq=50, write_images=True
     ),
-    # WandbCallback(),
+    WandbCallback(),
     tf.keras.callbacks.ModelCheckpoint(
         './logs/train/' + experiment_name + '_{epoch}.ckpt', save_weights_only=True
     )

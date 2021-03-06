@@ -1,5 +1,6 @@
 import os
 import wandb
+import gdown
 
 
 def init_wandb(
@@ -11,3 +12,10 @@ def init_wandb(
             project=project_name, entity=entity,
             name=experiment_name, sync_tensorboard=True
         )
+
+
+def download_dataset(dataset_name: str, dataset_access_key: str):
+    gdown.download(
+        'https://drive.google.com/uc?id={}'.format(dataset_access_key),
+        '{}.zip'.format(dataset_name), quiet=False
+    )
