@@ -7,12 +7,12 @@ from typing import List
 class NYUDepthV2DataLoader:
 
     def __init__(
-            self, data_dir: str, image_size: List[int],
-            val_split: float, single_image_overfit: bool = False):
+            self, data_dir: str, image_size: List[int], val_split: float,
+            single_image_overfit: bool = False, on_windows: bool = False):
         self.train_rgb, self.train_depth = [], []
         self.val_rgb, self.val_depth = [], []
         assert 0 <= val_split <= 1.0
-        self._populate_data_list(data_dir=data_dir, val_split=val_split)
+        self._populate_data_list(data_dir=data_dir, val_split=val_split, on_windows=on_windows)
         if single_image_overfit:
             self.train_rgb = [self.train_rgb[0]]
             self.train_depth = [self.train_depth[0]]
@@ -21,8 +21,11 @@ class NYUDepthV2DataLoader:
         self.rgb_size = image_size
         self.depth_size = [size // 2 for size in image_size]
 
-    def _populate_data_list(self, data_dir: str, val_split: float):
-        self.train_rgb = glob(str(os.path.join(data_dir, 'data\\nyu2_train\\*\\*.jpg')))
+    def _populate_data_list(self, data_dir: str, val_split: float, on_windows: bool):
+        self.train_rgb = glob(str(os.path.join(
+            data_dir,
+            'data\\nyu2_train\\*\\*.jpg' if on_windows else 'data/nyu2_train/*/*.jpg'
+        )))
         self.train_depth = [file_name.replace('jpg', 'png') for file_name in self.train_rgb]
         n_train_examples = int(len(self.train_rgb) * (1 - val_split))
         self.val_rgb = self.train_rgb[n_train_examples:]
