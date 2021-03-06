@@ -15,7 +15,7 @@ class Encoder(tf.keras.Model):
         for layer in backbone_layers:
             outputs.append(self.backbone.get_layer(layer).output)
         self.encoder = tf.keras.Model(
-            inputs=self.base_model.inputs, outputs=outputs
+            inputs=self.backbone.inputs, outputs=outputs
         )
 
     def call(self, inputs, training=None, mask=None):

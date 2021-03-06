@@ -6,11 +6,18 @@ from typing import List
 
 class NYUDepthV2DataLoader:
 
-    def __init__(self, data_dir: str, image_size: List[int], val_split: float):
+    def __init__(
+            self, data_dir: str, image_size: List[int],
+            val_split: float, single_image_overfit: bool = False):
         self.train_rgb, self.train_depth = [], []
         self.val_rgb, self.val_depth = [], []
         assert 0 <= val_split <= 1.0
         self._populate_data_list(data_dir=data_dir, val_split=val_split)
+        if single_image_overfit:
+            self.train_rgb = [self.train_rgb[0]]
+            self.train_depth = [self.train_depth[0]]
+            self.val_rgb = [self.val_rgb[0]]
+            self.val_depth = [self.val_depth[0]]
         self.rgb_size = image_size
         self.depth_size = [size // 2 for size in image_size]
 
