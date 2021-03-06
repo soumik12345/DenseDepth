@@ -1,6 +1,8 @@
 import os
 import wandb
 import gdown
+import zipfile
+import subprocess
 
 
 def init_wandb(
@@ -19,3 +21,9 @@ def download_dataset(dataset_name: str, dataset_access_key: str):
         'https://drive.google.com/uc?id={}'.format(dataset_access_key),
         '{}.zip'.format(dataset_name), quiet=False
     )
+    try:
+        os.mkdir('data')
+    except: pass
+    with zipfile.ZipFile('{}.zip'.format(dataset_name), 'r') as zip_ref:
+        zip_ref.extractall('data')
+    subprocess.run(['rm', '{}.zip'.format(dataset_name)])
