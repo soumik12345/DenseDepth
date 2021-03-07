@@ -2,6 +2,7 @@ import os
 from glob import glob
 import tensorflow as tf
 from typing import List
+from sklearn.model_selection import train_test_split
 
 
 class NYUDepthV2DataLoader:
@@ -27,11 +28,13 @@ class NYUDepthV2DataLoader:
             'data\\nyu2_train\\*\\*.jpg' if on_windows else 'data/nyu2_train/*/*.jpg'
         )))
         self.train_depth = [file_name.replace('jpg', 'png') for file_name in self.train_rgb]
-        n_train_examples = int(len(self.train_rgb) * (1 - val_split))
-        self.val_rgb = self.train_rgb[n_train_examples:]
-        self.val_depth = self.train_depth[n_train_examples:]
-        self.train_rgb = self.train_rgb[:n_train_examples]
-        self.train_depth = self.train_depth[:n_train_examples]
+        (
+            self.train_rgb, self.val_rgb,
+            self.train_depth, self.val_depth
+        ) = train_test_split(
+            self.train_rgb, self.train_depth,
+            test_size=val_split, random_state=42
+        )
 
     def summarize(self):
         print('Train RGB Images:', len(self.train_rgb))
