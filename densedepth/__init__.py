@@ -1,4 +1,4 @@
-from densedepth.dataloaders.dataloader import NYUDepthV2DataLoader
+from .dataloaders import NYUDepthV2DataLoader, NYUTFRecordLoader
 from .model import DenseDepth
 from .loss import DenseDepthLoss
 from .training import Trainer
