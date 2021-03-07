@@ -4,9 +4,7 @@ import wandb
 import zipfile
 import subprocess
 import tensorflow as tf
-from datetime import datetime
 import tensorflow_addons as tfa
-from wandb.keras import WandbCallback
 
 from densedepth import DenseDepth, DenseDepthLoss
 
@@ -51,13 +49,12 @@ class Trainer:
                 )
             )
 
-    def train(self, epochs: int):
+    def train(self, epochs: int, log_dir: str):
         callbacks = [
             tf.keras.callbacks.TensorBoard(
-                log_dir='./logs/train/' + datetime.now().strftime('%Y%m%d-%H%M%S'),
-                histogram_freq=1, update_freq=50, write_images=True
+                log_dir=log_dir, histogram_freq=1,
+                update_freq=50, write_images=True
             ),
-            WandbCallback(),
             tf.keras.callbacks.ModelCheckpoint(
                 './logs/train/' + self.experiment_name + '_{epoch}.ckpt',
                 save_weights_only=True
