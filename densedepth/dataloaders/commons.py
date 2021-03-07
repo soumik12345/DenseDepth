@@ -9,10 +9,8 @@ def bytes_feature(value):
 
 
 def create_example(rgb_path, depth_path):
-    rgb_image = tf.io.read_file(rgb_path)
-    rgb_image = tf.image.decode_image(rgb_image, channels=3)
-    depth_image = tf.io.read_file(depth_path)
-    depth_image = tf.image.decode_jpeg(depth_image)
+    rgb_image = tf.io.read_file(rgb_path).numpy()
+    depth_image = tf.io.read_file(depth_path).numpy()
     return tf.train.Example(
         features=tf.train.Features(feature={
             'rgb_image': bytes_feature(rgb_image),
