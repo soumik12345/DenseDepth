@@ -42,14 +42,14 @@ class Trainer:
         self.val_dataset = val_dataset
         with strategy.scope():
             self.model = DenseDepth()
-        self.model.compile(
-            optimizer=tfa.optimizers.AdamW(
-                learning_rate=learning_rate,
-                weight_decay=weight_decay
-            ), loss=DenseDepthLoss(
-                lambda_weight=0.1, depth_max_val=1000.0 / 10.0
+            self.model.compile(
+                optimizer=tfa.optimizers.AdamW(
+                    learning_rate=learning_rate,
+                    weight_decay=weight_decay
+                ), loss=DenseDepthLoss(
+                    lambda_weight=0.1, depth_max_val=1000.0 / 10.0
+                )
             )
-        )
 
     def train(self, epochs: int):
         callbacks = [
