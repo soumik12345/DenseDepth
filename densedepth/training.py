@@ -42,7 +42,7 @@ class Trainer:
         self.val_dataset = val_dataset
         with strategy.scope():
             self.model = DenseDepth()
-        self.model.build(model_build_shape)
+        # self.model.build(model_build_shape)
         self.model.compile(
             optimizer=tf.keras.optimizers.Adam(
                 learning_rate=learning_rate, amsgrad=True
