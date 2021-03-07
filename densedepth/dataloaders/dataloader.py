@@ -23,7 +23,7 @@ class NYUDepthV2DataLoader:
         self.depth_size = [size // 2 for size in image_size]
 
     def _populate_data_list(self, data_dir: str, val_split: float):
-        self.train_rgb = glob(str(os.path.join(data_dir, '*/*.jpg')))
+        self.train_rgb = glob(str(os.path.join(data_dir, 'nyu2_train/*/*.jpg')))
         self.train_depth = [file_name.replace('jpg', 'png') for file_name in self.train_rgb]
         (
             self.train_rgb, self.val_rgb,
