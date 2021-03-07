@@ -37,11 +37,12 @@ class Trainer:
                 name=self.experiment_name, sync_tensorboard=True
             )
 
-    def compile(self, train_dataset, val_dataset, model_build_shape: List[int], learning_rate: float):
+    def compile(self, train_dataset, val_dataset, model_build_shape: List[int], learning_rate: float, strategy):
         self.train_dataset = train_dataset
         self.val_dataset = val_dataset
-        self.model = DenseDepth()
-        self.model.build(model_build_shape)
+        with strategy.scope():
+            self.model = DenseDepth()
+            self.model.build(model_build_shape)
         self.model.compile(
             optimizer=tf.keras.optimizers.Adam(
                 learning_rate=learning_rate, amsgrad=True

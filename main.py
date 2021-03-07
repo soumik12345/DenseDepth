@@ -1,4 +1,4 @@
-from densedepth import Trainer, NYUDepthV2DataLoader
+from densedepth import Trainer, NYUDepthV2DataLoader, get_strategy
 
 
 experiment_name = 'NYU_Depth_V2_single_image_overfit'
