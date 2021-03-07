@@ -17,7 +17,7 @@ class NYUTFRecordLoader:
         return image
 
     def _preprocess_depth(self, image):
-        image = tf.image.decode_jpeg(image)
+        image = tf.image.decode_jpeg(image, channels=1)
         image = tf.image.resize(image, self.depth_size)
         image = tf.image.convert_image_dtype(image / 255.0, dtype=tf.float32)
         image = 1000 / tf.clip_by_value(image * 1000, 10, 1000)
