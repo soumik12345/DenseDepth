@@ -39,7 +39,7 @@ class NYUDepthV2DataLoader:
     def summarize(self):
         print('Train RGB Images:', len(self.train_rgb))
         print('Train Depth Images:', len(self.train_depth))
-        print('validation RGB Images:', len(self.train_rgb))
+        print('validation RGB Images:', len(self.val_rgb))
         print('Validation Depth Images:', len(self.val_depth))
 
     def _parse_rgb(self, file_path):
