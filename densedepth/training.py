@@ -37,14 +37,15 @@ class Trainer:
                 name=self.experiment_name, sync_tensorboard=True
             )
 
-    def compile(self, train_dataset, val_dataset, learning_rate: float, strategy):
+    def compile(self, train_dataset, val_dataset, learning_rate: float, weight_decay: float, strategy):
         self.train_dataset = train_dataset
         self.val_dataset = val_dataset
         with strategy.scope():
             self.model = DenseDepth()
         self.model.compile(
             optimizer=tfa.optimizers.AdamW(
-                learning_rate=learning_rate
+                learning_rate=learning_rate,
+                weight_decay=weight_decay
             ), loss=DenseDepthLoss(
                 lambda_weight=0.1, depth_max_val=1000.0 / 10.0
             )
