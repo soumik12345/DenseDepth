@@ -2,6 +2,7 @@ import os
 from glob import glob
 import tensorflow as tf
 from typing import List
+from random import shuffle
 from sklearn.model_selection import train_test_split
 
 
@@ -24,6 +25,7 @@ class NYUDepthV2DataLoader:
 
     def _populate_data_list(self, data_dir: str, val_split: float):
         self.train_rgb = glob(str(os.path.join(data_dir, 'nyu2_train/*/*.jpg')))
+        shuffle(self.train_rgb)
         self.train_depth = [file_name.replace('jpg', 'png') for file_name in self.train_rgb]
         (
             self.train_rgb, self.val_rgb,
@@ -48,7 +50,7 @@ class NYUDepthV2DataLoader:
 
     def _parse_depth(self, file_path):
         image = tf.io.read_file(file_path)
-        image = tf.image.decode_jpeg(image)
+        image = tf.image.decode_jpeg(image, channels=1)
         image = tf.image.resize(image, self.depth_size)
         image = tf.image.convert_image_dtype(image / 255.0, dtype=tf.float32)
         image = 1000 / tf.clip_by_value(image * 1000, 10, 1000)
@@ -62,10 +64,6 @@ class NYUDepthV2DataLoader:
         dataset = dataset.map(
             map_func=self._map_function,
             num_parallel_calls=tf.data.AUTOTUNE
-        )
-        dataset = dataset.shuffle(
-            buffer_size=len(rgb_images),
-            reshuffle_each_iteration=True
         )
         dataset = dataset.batch(batch_size=batch_size)
         dataset = dataset.repeat(1)
